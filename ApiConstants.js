@@ -1,4 +1,5 @@
 export const ChatApi = {
-  HiteshChoudhary: "http://localhost:5000/api/hitesh/chat",
-  PiyushGarg: "http://localhost:5000/api/piyush/chat",
+  HiteshChoudhary:
+    "https://ai-persona-backend-qx3d.onrender.com/api/hitesh/chat",
+  PiyushGarg: "https://ai-persona-backend-qx3d.onrender.com/api/piyush/chat",
 };
