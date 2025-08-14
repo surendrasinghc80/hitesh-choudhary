@@ -5,7 +5,6 @@ import axios from "axios";
 import {
   Moon,
   Sun,
-  ArrowRight,
   Sparkles,
   MessageCircle,
   Star,
@@ -54,6 +53,8 @@ export default function PersonaLanding() {
       apiEndpoint: ChatApi.PiyushGarg,
     },
   ];
+
+  console.log("api", ChatApi.HiteshChoudhary);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

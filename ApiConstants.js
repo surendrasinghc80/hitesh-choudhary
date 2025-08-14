@@ -1,5 +1,6 @@
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export const ChatApi = {
-  HiteshChoudhary:
-    "https://ai-persona-backend-qx3d.onrender.com/api/hitesh/chat",
-  PiyushGarg: "https://ai-persona-backend-qx3d.onrender.com/api/piyush/chat",
+  HiteshChoudhary: `${API_BASE_URL}/hitesh/chat`,
+  PiyushGarg: `${API_BASE_URL}/piyush/chat`,
 };
