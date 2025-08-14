@@ -1,13 +1,12 @@
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
-import { ThemeProvider } from "../components/theme-provider"
-import "./globals.css"
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { ThemeProvider } from "../components/theme-provider";
+import "./globals.css";
 
 export const metadata = {
-  title: "Glassmorphism Chat",
-  description: "Modern chat interface with glassmorphism design",
-  generator: "v0.app",
-}
+  title: "AI Persona GPT",
+  description: "Modern chat interface with Persona AI",
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -22,10 +21,15 @@ html {
         `}</style>
       </head>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           {children}
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }
