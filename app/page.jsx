@@ -230,7 +230,7 @@ export default function PersonaLanding() {
         {/* Chat Input */}
         <div className="sticky bottom-0 bg-white/20 dark:bg-black/20 backdrop-blur-md border-t border-white/30 dark:border-white/10">
           <div className="max-w-4xl mx-auto px-6 py-4">
-            <div className="flex gap-3 items-end">
+            <div className="flex gap-3 items-center justify-center">
               <div className="flex-1 relative">
                 <textarea
                   value={inputMessage}
@@ -245,7 +245,7 @@ export default function PersonaLanding() {
               <button
                 onClick={sendMessage}
                 disabled={!inputMessage.trim()}
-                className="p-3 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="p-3 mb-2 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 <Send className="w-5 h-5" />
               </button>
