@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { ChatApi } from "@/ApiConstants";
+import Image from "next/image";
 
 export default function PersonaLanding() {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
@@ -261,12 +262,13 @@ export default function PersonaLanding() {
       {/* Navigation */}
       <nav className="relative z-10 flex justify-between items-center p-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
-            Persona
-          </h1>
+          <Image
+            className="rounded-full"
+            src="/logo.png"
+            alt="Logo"
+            width={50}
+            height={50}
+          />
         </div>
 
         <div className="flex items-center gap-4">
@@ -405,14 +407,13 @@ export default function PersonaLanding() {
       <footer className="relative z-10 mt-20 py-12 border-t border-white/20 dark:border-white/10 bg-white/5 dark:bg-black/5 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center gap-2 mb-4 md:mb-0">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
-                Persona
-              </span>
-            </div>
+            <Image
+              className="rounded-full"
+              src="/logo.png"
+              alt="Logo"
+              width={50}
+              height={50}
+            />
 
             <div className="text-sm text-gray-600 dark:text-gray-400">
               © 2025 Persona. Built with modern web technologies.
