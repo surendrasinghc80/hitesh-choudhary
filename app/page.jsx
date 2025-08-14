@@ -1,27 +1,38 @@
-"use client"
+"use client";
 
-import { useState, useRef, useEffect } from "react"
-import { Moon, Sun, ArrowRight, Sparkles, MessageCircle, Star, Send, ArrowLeft } from "lucide-react"
-import { useTheme } from "next-themes"
+import { useState, useRef, useEffect } from "react";
+import {
+  Moon,
+  Sun,
+  ArrowRight,
+  Sparkles,
+  MessageCircle,
+  Star,
+  Send,
+  ArrowLeft,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import axios from "axios";
 
 export default function PersonaLanding() {
-  const [selectedCharacter, setSelectedCharacter] = useState(null)
-  const [messages, setMessages] = useState([])
-  const [inputMessage, setInputMessage] = useState("")
-  const [isTyping, setIsTyping] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
-  const messagesEndRef = useRef(null)
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   const characters = [
     {
       id: 1,
       name: "Hitesh Choudhary",
-      description: "Expert programming instructor with 10+ years experience",
+      description:
+        "Retired from corporate and full time YouTuber, x founder of LCO (acquired), x CTO, Sr. Director at PW. 2 YT channels (950k & 470k)",
       image: "/indian-male-developer-instructor.png",
       color: "from-emerald-400 to-emerald-600",
       bgColor: "bg-emerald-500",
@@ -30,24 +41,25 @@ export default function PersonaLanding() {
     {
       id: 2,
       name: "Piyush Garg",
-      description: "Passionate educator specializing in modern web technologies",
+      description:
+        "Passionate educator specializing in modern web technologies",
       image: "/young-indian-male-web-developer-tech-educator-smiling.png",
       color: "from-blue-400 to-blue-600",
       bgColor: "bg-blue-500",
       specialty: "Frontend Development",
     },
-  ]
+  ];
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    scrollToBottom();
+  }, [messages]);
 
   const startChat = (character) => {
-    setSelectedCharacter(character)
+    setSelectedCharacter(character);
     setMessages([
       {
         id: 1,
@@ -55,55 +67,78 @@ export default function PersonaLanding() {
         sender: "ai",
         timestamp: new Date(),
       },
-    ])
-  }
+    ]);
+  };
 
   const sendMessage = async () => {
-    if (!inputMessage.trim()) return
+    if (!inputMessage.trim()) return;
 
     const newMessage = {
       id: messages.length + 1,
       text: inputMessage,
       sender: "user",
       timestamp: new Date(),
-    }
+    };
 
-    setMessages((prev) => [...prev, newMessage])
-    setInputMessage("")
-    setIsTyping(true)
+    setMessages((prev) => [...prev, newMessage]);
+    setInputMessage("");
+    setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/hitesh/chat",
+        {
+          message: inputMessage,
+          character: selectedCharacter.name,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       const aiResponse = {
         id: messages.length + 2,
-        text: `That's a great question! As a ${selectedCharacter.specialty} expert, I'd recommend starting with the fundamentals and building your way up. What specific area would you like to focus on?`,
+        text: response.data?.reply || "I'm not sure how to respond to that.", // Changed to use 'reply' field
         sender: "ai",
         timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, aiResponse])
-      setIsTyping(false)
-    }, 1500)
-  }
+      };
+      setMessages((prev) => [...prev, aiResponse]);
+    } catch (error) {
+      console.error("Error calling API:", error);
+
+      const aiResponse = {
+        id: messages.length + 2,
+        text: "Sorry, I'm having trouble connecting. Please try again later.",
+        sender: "ai",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, aiResponse]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage()
+      e.preventDefault();
+      sendMessage();
     }
-  }
+  };
 
   const backToLanding = () => {
-    setSelectedCharacter(null)
-    setMessages([])
-    setInputMessage("")
-  }
+    setSelectedCharacter(null);
+    setMessages([]);
+    setInputMessage("");
+  };
 
   if (!mounted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-50 to-indigo-100 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
       </div>
-    )
+    );
   }
 
   // Chat Interface
@@ -126,8 +161,12 @@ export default function PersonaLanding() {
                 className="w-10 h-10 rounded-full object-cover border-2 border-white/30"
               />
               <div>
-                <h2 className="font-semibold text-gray-900 dark:text-white">{selectedCharacter.name}</h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{selectedCharacter.specialty}</p>
+                <h2 className="font-semibold text-gray-900 dark:text-white">
+                  {selectedCharacter.name}
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {selectedCharacter.specialty}
+                </p>
               </div>
             </div>
             <button
@@ -148,7 +187,12 @@ export default function PersonaLanding() {
         <div className="max-w-4xl mx-auto px-6 py-6 min-h-[calc(100vh-200px)]">
           <div className="space-y-4 mb-6">
             {messages.map((message) => (
-              <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
+              <div
+                key={message.id}
+                className={`flex ${
+                  message.sender === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
                 <div
                   className={`
                     max-w-xs lg:max-w-md px-4 py-3 rounded-2xl backdrop-blur-sm border
@@ -210,7 +254,7 @@ export default function PersonaLanding() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   // Landing Page
@@ -227,39 +271,6 @@ export default function PersonaLanding() {
           </h1>
         </div>
 
-        <div className="hidden md:flex items-center gap-8">
-          <a
-            href="#"
-            className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-          >
-            Home
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-          >
-            Characters
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-          >
-            About Us
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-          >
-            Resources
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
-          >
-            Pricing
-          </a>
-        </div>
-
         <div className="flex items-center gap-4">
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -272,13 +283,6 @@ export default function PersonaLanding() {
               <Moon className="w-5 h-5 text-purple-600" />
             )}
           </button>
-          <button className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
-            Login
-          </button>
-          <button className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full hover:scale-105 transition-all duration-300 flex items-center gap-2">
-            Get Started Now
-            <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
       </nav>
 
@@ -287,7 +291,9 @@ export default function PersonaLanding() {
         <div className="mb-6">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 dark:bg-black/20 border border-white/30 dark:border-white/10 backdrop-blur-sm mb-8">
             <Sparkles className="w-4 h-4 text-purple-500" />
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">TOTALLY NOT INAPPROPRIATE</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              TOTALLY NOT INAPPROPRIATE
+            </span>
           </div>
         </div>
 
@@ -302,14 +308,18 @@ export default function PersonaLanding() {
         </h1>
 
         <p className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-          Connect with AI characters who are definitely appropriate for your learning journey. They remember your
-          progress... err... conversations!
+          Connect with AI characters who are definitely appropriate for your
+          learning journey. They remember your progress... err... conversations!
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
           <button
             className="px-8 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-full font-semibold hover:scale-105 transition-all duration-300 shadow-lg flex items-center gap-2 border border-gray-200 dark:border-gray-700"
-            onClick={() => document.getElementById("characters").scrollIntoView({ behavior: "smooth" })}
+            onClick={() =>
+              document
+                .getElementById("characters")
+                .scrollIntoView({ behavior: "smooth" })
+            }
           >
             <MessageCircle className="w-5 h-5" />
             Start Learning Free
@@ -320,9 +330,16 @@ export default function PersonaLanding() {
         </div>
 
         {/* Character Grid */}
-        <div id="characters" className="flex flex-wrap justify-center gap-8 max-w-4xl mx-auto">
+        <div
+          id="characters"
+          className="flex flex-wrap justify-center gap-8 max-w-4xl mx-auto"
+        >
           {characters.map((character, index) => (
-            <div key={character.id} className="group cursor-pointer" onClick={() => startChat(character)}>
+            <div
+              key={character.id}
+              className="group cursor-pointer"
+              onClick={() => startChat(character)}
+            >
               <div
                 className={`
                 relative p-8 rounded-3xl transition-all duration-300 hover:scale-105 hover:-translate-y-2
@@ -341,8 +358,12 @@ export default function PersonaLanding() {
                   </div>
                 </div>
 
-                <h3 className="text-white font-bold text-xl mb-3">{character.name}</h3>
-                <p className="text-white/80 text-sm mb-4 leading-relaxed">{character.description}</p>
+                <h3 className="text-white font-bold text-xl mb-3">
+                  {character.name}
+                </h3>
+                <p className="text-white/80 text-sm mb-4 leading-relaxed">
+                  {character.description}
+                </p>
 
                 <div className="flex items-center justify-center gap-1 text-white/90 text-sm">
                   <Star className="w-4 h-4 fill-current" />
@@ -358,15 +379,25 @@ export default function PersonaLanding() {
         {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 max-w-4xl mx-auto">
           <div className="text-center p-6 rounded-2xl bg-white/10 dark:bg-black/10 backdrop-blur-sm border border-white/20 dark:border-white/10">
-            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">50K+</div>
-            <div className="text-gray-600 dark:text-gray-400">Active Learners</div>
+            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+              50K+
+            </div>
+            <div className="text-gray-600 dark:text-gray-400">
+              Active Learners
+            </div>
           </div>
           <div className="text-center p-6 rounded-2xl bg-white/10 dark:bg-black/10 backdrop-blur-sm border border-white/20 dark:border-white/10">
-            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">1M+</div>
-            <div className="text-gray-600 dark:text-gray-400">Conversations</div>
+            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+              1M+
+            </div>
+            <div className="text-gray-600 dark:text-gray-400">
+              Conversations
+            </div>
           </div>
           <div className="text-center p-6 rounded-2xl bg-white/10 dark:bg-black/10 backdrop-blur-sm border border-white/20 dark:border-white/10">
-            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">24/7</div>
+            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+              24/7
+            </div>
             <div className="text-gray-600 dark:text-gray-400">Available</div>
           </div>
         </div>
@@ -386,11 +417,11 @@ export default function PersonaLanding() {
             </div>
 
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              © 2024 Persona. Built with modern web technologies.
+              © 2025 Persona. Built with modern web technologies.
             </div>
           </div>
         </div>
       </footer>
     </div>
-  )
+  );
 }
