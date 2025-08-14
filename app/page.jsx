@@ -55,8 +55,6 @@ export default function PersonaLanding() {
     },
   ];
 
-  console.log("api", ChatApi.HiteshChoudhary);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
