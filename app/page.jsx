@@ -14,7 +14,9 @@ import {
 import { useTheme } from "next-themes";
 import ReactMarkdown from "react-markdown";
 import { ChatApi } from "@/ApiConstants";
-import Image from "next/image";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { atomDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import CodeBlock from "@/components/CodeBlock";
 
 export default function PersonaLanding() {
   const [selectedCharacter, setSelectedCharacter] = useState(null);
@@ -40,8 +42,7 @@ export default function PersonaLanding() {
       color: "from-emerald-400 to-emerald-600",
       bgColor: "bg-emerald-500",
       specialty: "Retired corporate and full time YouTuber",
-      apiEndpoint:
-        "https://ai-persona-backend-qx3d.onrender.com/api/hitesh/chat",
+      apiEndpoint: ChatApi.HiteshChoudhary,
     },
     {
       id: 2,
@@ -53,8 +54,7 @@ export default function PersonaLanding() {
       color: "from-blue-400 to-blue-600",
       bgColor: "bg-blue-500",
       specialty: "Full-Stack Development and  full time YouTuber",
-      apiEndpoint:
-        "https://ai-persona-backend-qx3d.onrender.com/api/piyush/chat",
+      apiEndpoint: ChatApi.PiyushGarg,
     },
   ];
 
@@ -210,7 +210,35 @@ export default function PersonaLanding() {
                   `}
                 >
                   <div className="text-sm leading-relaxed prose prose-sm max-w-none">
-                    <ReactMarkdown>{message.text}</ReactMarkdown>
+                    <div className="text-sm leading-relaxed prose prose-sm max-w-none dark:prose-invert">
+                      <ReactMarkdown
+                        components={{
+                          code({
+                            node,
+                            inline,
+                            className,
+                            children,
+                            ...props
+                          }) {
+                            const match = /language-(\w+)/.exec(
+                              className || ""
+                            );
+                            return !inline && match ? (
+                              <CodeBlock
+                                language={match[1]}
+                                value={String(children).replace(/\n$/, "")}
+                              />
+                            ) : (
+                              <code className={className} {...props}>
+                                {children}
+                              </code>
+                            );
+                          },
+                        }}
+                      >
+                        {message.text}
+                      </ReactMarkdown>
+                    </div>
                   </div>
                 </div>
               </div>
