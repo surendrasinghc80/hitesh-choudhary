@@ -12,6 +12,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useTheme } from "next-themes";
+import ReactMarkdown from "react-markdown";
 import { ChatApi } from "@/ApiConstants";
 import Image from "next/image";
 
@@ -39,7 +40,8 @@ export default function PersonaLanding() {
       color: "from-emerald-400 to-emerald-600",
       bgColor: "bg-emerald-500",
       specialty: "Retired corporate and full time YouTuber",
-      apiEndpoint: ChatApi.HiteshChoudhary,
+      apiEndpoint:
+        "https://ai-persona-backend-qx3d.onrender.com/api/hitesh/chat",
     },
     {
       id: 2,
@@ -51,11 +53,16 @@ export default function PersonaLanding() {
       color: "from-blue-400 to-blue-600",
       bgColor: "bg-blue-500",
       specialty: "Full-Stack Development and  full time YouTuber",
-      apiEndpoint: ChatApi.PiyushGarg,
+      apiEndpoint:
+        "https://ai-persona-backend-qx3d.onrender.com/api/piyush/chat",
     },
   ];
 
-  console.log("api", ChatApi.HiteshChoudhary);
+  // Debug: Log API endpoints
+  console.log(
+    "Available characters:",
+    characters.map((c) => ({ name: c.name, endpoint: c.apiEndpoint }))
+  );
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -202,7 +209,9 @@ export default function PersonaLanding() {
                     }
                   `}
                 >
-                  <p className="text-sm leading-relaxed">{message.text}</p>
+                  <div className="text-sm leading-relaxed prose prose-sm max-w-none">
+                    <ReactMarkdown>{message.text}</ReactMarkdown>
+                  </div>
                 </div>
               </div>
             ))}
@@ -262,13 +271,12 @@ export default function PersonaLanding() {
       {/* Navigation */}
       <nav className="relative z-10 flex justify-between items-center p-6 max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
-          <Image
-            className="rounded-full"
-            src="/logo.png"
-            alt="Logo"
-            width={50}
-            height={50}
-          />
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-8 h-8 text-purple-600 dark:text-purple-400" />
+            <span className="text-xl font-bold text-gray-900 dark:text-white">
+              AI Persona Chat
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center gap-4">
@@ -407,13 +415,12 @@ export default function PersonaLanding() {
       <footer className="relative z-10 mt-20 py-12 border-t border-white/20 dark:border-white/10 bg-white/5 dark:bg-black/5 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <Image
-              className="rounded-full"
-              src="/logo.png"
-              alt="Logo"
-              width={50}
-              height={50}
-            />
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                AI Persona Chat
+              </span>
+            </div>
 
             <div className="text-sm text-gray-600 dark:text-gray-400">
               © 2025 Persona. Built with modern web technologies.
